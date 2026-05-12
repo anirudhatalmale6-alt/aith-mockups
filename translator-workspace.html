@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Translation Hub — Workspace</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap');
+
+  :root {
+    --navy: #001F3F;
+    --navy-deep: #00152B;
+    --navy-light: #0A2E52;
+    --gold: #D4AF37;
+    --gold-soft: #E8D48B;
+    --gold-pale: #FBF5E0;
+    --white: #FFFFFF;
+    --gray-50: #F8F9FB;
+    --gray-100: #F0F2F5;
+    --gray-200: #E2E5EA;
+    --gray-300: #C8CDD5;
+    --gray-400: #9BA3B0;
+    --gray-500: #6B7280;
+    --gray-700: #374151;
+    --gray-900: #111827;
+    --green: #059669;
+    --green-bg: #ECFDF5;
+    --yellow: #D97706;
+    --yellow-bg: #FFFBEB;
+    --red: #DC2626;
+    --red-bg: #FEF2F2;
+    --blue: #2563EB;
+    --blue-bg: #EFF6FF;
+    --shadow-sm: 0 1px 2px rgba(0,31,63,0.06);
+    --shadow-md: 0 4px 12px rgba(0,31,63,0.08);
+    --shadow-lg: 0 8px 30px rgba(0,31,63,0.12);
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  /* ─── Top Bar ─── */
+  .topbar {
+    height: 56px;
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 16px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .topbar::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-soft), var(--gold));
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--white);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    padding-right: 16px;
+    border-right: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .logo-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--gold);
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+  }
+
+  .project-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .project-name {
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .lang-pair {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: var(--gold-soft);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .lang-pair .arrow { opacity: 0.5; }
+
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  .progress-bar-outer {
+    width: 140px;
+    height: 6px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 68%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-text {
+    color: var(--gray-300);
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .progress-text strong {
+    color: var(--gold-soft);
+  }
+
+  .engine-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 4px 10px;
+    border-radius: 6px;
+    color: var(--gray-300);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .engine-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10B981;
+    animation: pulse-dot 2s ease infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 12px;
+    border-left: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .btn-topbar {
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+    transition: all 0.2s;
+  }
+
+  .btn-export {
+    background: var(--gold);
+    color: var(--navy);
+  }
+
+  .btn-export:hover { background: var(--gold-soft); }
+
+  .btn-save {
+    background: rgba(255,255,255,0.1);
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .btn-save:hover { background: rgba(255,255,255,0.18); }
+
+  /* ─── Toolbar ─── */
+  .toolbar {
+    height: 42px;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 6px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0 8px;
+  }
+
+  .toolbar-group + .toolbar-group {
+    border-left: 1px solid var(--gray-200);
+  }
+
+  .toolbar-btn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-500);
+    font-size: 13px;
+    transition: all 0.15s;
+  }
+
+  .toolbar-btn:hover {
+    background: var(--gray-100);
+    color: var(--navy);
+  }
+
+  .toolbar-btn.active {
+    background: var(--navy);
+    color: var(--white);
+  }
+
+  .toolbar-label {
+    font-size: 11px;
+    color: var(--gray-400);
+    font-weight: 500;
+    padding: 0 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .toolbar-spacer { flex: 1; }
+
+  .filter-pills {
+    display: flex;
+    gap: 4px;
+  }
+
+  .filter-pill {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid var(--gray-200);
+    background: var(--white);
+    color: var(--gray-500);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-pill:hover { border-color: var(--navy); color: var(--navy); }
+  .filter-pill.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+  /* ─── Main Layout ─── */
+  .workspace {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    height: calc(100vh - 100px);
+    overflow: hidden;
+  }
+
+  /* ─── Segments Panel ─── */
+  .segments-panel {
+    overflow-y: auto;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .segments-panel::-webkit-scrollbar { width: 6px; }
+  .segments-panel::-webkit-scrollbar-track { background: transparent; }
+  .segments-panel::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
+
+  /* ─── Segment Row ─── */
+  .segment {
+    display: grid;
+    grid-template-columns: 36px 1fr 1fr;
+    gap: 0;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .segment:hover {
+    border-color: var(--navy);
+    box-shadow: var(--shadow-md), 0 0 0 1px rgba(0,31,63,0.05);
+  }
+
+  .segment.active {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px rgba(212,175,55,0.2), var(--shadow-md);
+  }
+
+  .segment.approved {
+    border-left: 3px solid var(--green);
+  }
+
+  .segment.approved .seg-num { color: var(--green); }
+
+  .seg-num {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-400);
+    background: var(--gray-50);
+    border-right: 1px solid var(--gray-200);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .seg-source, .seg-target {
+    padding: 12px 14px;
+    min-height: 60px;
+  }
+
+  .seg-source {
+    border-right: 1px solid var(--gray-200);
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--gray-700);
+    background: var(--gray-50);
+  }
+
+  .seg-target {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--gray-900);
+    position: relative;
+  }
+
+  .seg-target-text {
+    outline: none;
+    border: none;
+    width: 100%;
+    min-height: 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--gray-900);
+    resize: none;
+    background: transparent;
+  }
+
+  .seg-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .confidence {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .confidence.high { background: var(--green-bg); color: var(--green); }
+  .confidence.medium { background: var(--yellow-bg); color: var(--yellow); }
+  .confidence.low { background: var(--red-bg); color: var(--red); }
+
+  .confidence-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+
+  .confidence.high .confidence-dot { background: var(--green); }
+  .confidence.medium .confidence-dot { background: var(--yellow); }
+  .confidence.low .confidence-dot { background: var(--red); }
+
+  .tm-match {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--blue-bg);
+    color: var(--blue);
+    letter-spacing: 0.02em;
+  }
+
+  .seg-actions {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+  }
+
+  .btn-approve, .btn-edit-seg {
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: all 0.15s;
+  }
+
+  .btn-approve {
+    background: var(--green);
+    color: var(--white);
+  }
+
+  .btn-approve:hover { background: #047857; }
+
+  .btn-approve.approved-btn {
+    background: var(--green-bg);
+    color: var(--green);
+    pointer-events: none;
+  }
+
+  .btn-edit-seg {
+    background: var(--gray-100);
+    color: var(--gray-500);
+    border: 1px solid var(--gray-200);
+  }
+
+  .btn-edit-seg:hover { background: var(--gray-200); }
+
+  /* ─── Column Headers ─── */
+  .col-headers {
+    display: grid;
+    grid-template-columns: 36px 1fr 1fr;
+    padding: 0 20px;
+    margin-bottom: -8px;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding-top: 0;
+  }
+
+  .col-header {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gray-400);
+    padding: 8px 14px;
+  }
+
+  /* ─── Sidebar ─── */
+  .sidebar {
+    background: var(--white);
+    border-left: 1px solid var(--gray-200);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-section {
+    padding: 16px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .sidebar-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gray-400);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .sidebar-title .count {
+    background: var(--navy);
+    color: var(--white);
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 10px;
+  }
+
+  .tm-result {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+
+  .tm-result:hover {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 1px rgba(212,175,55,0.15);
+  }
+
+  .tm-result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .tm-score {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--green);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .tm-source-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gray-400);
+    font-weight: 600;
+  }
+
+  .tm-text {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--gray-700);
+  }
+
+  .tm-text.target {
+    color: var(--navy);
+    font-weight: 500;
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px dashed var(--gray-200);
+  }
+
+  .tm-use-btn {
+    width: 100%;
+    margin-top: 6px;
+    padding: 4px;
+    border: 1px solid var(--gray-200);
+    border-radius: 4px;
+    background: var(--white);
+    color: var(--gray-500);
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .tm-use-btn:hover {
+    background: var(--gold-pale);
+    border-color: var(--gold);
+    color: var(--navy);
+  }
+
+  .glossary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .glossary-item:last-child { border-bottom: none; }
+
+  .glossary-source {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .glossary-target {
+    font-size: 12px;
+    color: var(--gray-600);
+  }
+
+  .glossary-domain {
+    font-size: 9px;
+    background: var(--gold-pale);
+    color: var(--gold);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-left: 6px;
+  }
+
+  .comment {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .comment-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--navy-light);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .comment-body {
+    flex: 1;
+  }
+
+  .comment-author {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-900);
+  }
+
+  .comment-time {
+    font-size: 10px;
+    color: var(--gray-400);
+    margin-left: 6px;
+  }
+
+  .comment-text {
+    font-size: 12px;
+    color: var(--gray-600);
+    line-height: 1.5;
+    margin-top: 2px;
+  }
+
+  .comment-input-wrap {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .comment-input {
+    flex: 1;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .comment-input:focus { border-color: var(--gold); }
+
+  .comment-send {
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-sm);
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: background 0.15s;
+  }
+
+  .comment-send:hover { background: var(--navy-light); }
+
+  /* ─── Segment Header Row ─── */
+  .segment-headers {
+    display: grid;
+    grid-template-columns: 36px 1fr 1fr;
+    background: var(--gray-100);
+    border-radius: var(--radius) var(--radius) 0 0;
+    margin-bottom: -2px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .segment-headers span {
+    padding: 6px 14px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gray-400);
+  }
+
+  .segment-headers span:nth-child(2) {
+    border-right: 1px solid var(--gray-200);
+  }
+
+  /* Quality summary bar */
+  .quality-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 14px;
+    margin: 0 20px 12px;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .quality-bar-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gray-400);
+  }
+
+  .quality-bar-visual {
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--gray-100);
+    overflow: hidden;
+    display: flex;
+  }
+
+  .qb-high { width: 60%; background: var(--green); }
+  .qb-medium { width: 28%; background: var(--yellow); }
+  .qb-low { width: 12%; background: var(--red); }
+
+  .quality-stats {
+    display: flex;
+    gap: 10px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  .quality-stats span { display: flex; align-items: center; gap: 3px; }
+  .quality-stats .dot { width: 6px; height: 6px; border-radius: 50%; }
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">A</div>
+    AI Translation Hub
+  </div>
+  <div class="project-info">
+    <span class="project-name">Medical Device Manual v2.4</span>
+    <div class="lang-pair">
+      <span>🇺🇸 EN</span>
+      <span class="arrow">→</span>
+      <span>🇪🇸 ES</span>
+    </div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar-outer">
+      <div class="progress-bar-fill"></div>
+    </div>
+    <span class="progress-text"><strong>34</strong>/50 approved</span>
+  </div>
+  <div class="engine-badge">
+    <span class="engine-dot"></span>
+    GPT-4o + Claude
+  </div>
+  <div class="topbar-actions">
+    <button class="btn-topbar btn-save">↻ Auto-Save</button>
+    <button class="btn-topbar btn-export">⬇ Export DOCX</button>
+  </div>
+</div>
+
+<!-- Toolbar -->
+<div class="toolbar">
+  <div class="toolbar-group">
+    <span class="toolbar-label">View</span>
+    <button class="toolbar-btn active" title="Side by side">☷</button>
+    <button class="toolbar-btn" title="Stacked">☰</button>
+  </div>
+  <div class="toolbar-group">
+    <span class="toolbar-label">Actions</span>
+    <button class="toolbar-btn" title="Approve All High">✓✓</button>
+    <button class="toolbar-btn" title="Copy Source">⧉</button>
+    <button class="toolbar-btn" title="Re-translate">↻</button>
+  </div>
+  <div class="toolbar-spacer"></div>
+  <div class="filter-pills">
+    <span class="filter-pill active">All</span>
+    <span class="filter-pill">Needs Review</span>
+    <span class="filter-pill">Low Confidence</span>
+    <span class="filter-pill">Approved</span>
+  </div>
+</div>
+
+<!-- Main Workspace -->
+<div class="workspace">
+
+  <!-- Segments -->
+  <div class="segments-panel">
+
+    <!-- Quality Summary -->
+    <div class="quality-bar">
+      <span class="quality-bar-label">Quality</span>
+      <div class="quality-bar-visual">
+        <div class="qb-high"></div>
+        <div class="qb-medium"></div>
+        <div class="qb-low"></div>
+      </div>
+      <div class="quality-stats">
+        <span><span class="dot" style="background:var(--green)"></span> 30 High</span>
+        <span><span class="dot" style="background:var(--yellow)"></span> 14 Med</span>
+        <span><span class="dot" style="background:var(--red)"></span> 6 Low</span>
+      </div>
+    </div>
+
+    <!-- Column Headers -->
+    <div class="segment-headers">
+      <span>#</span>
+      <span>Source (English)</span>
+      <span>Target (Spanish)</span>
+    </div>
+
+    <!-- Segment 1 — Approved -->
+    <div class="segment approved">
+      <div class="seg-num">01</div>
+      <div class="seg-source">
+        This device is intended for use by trained medical professionals in clinical settings.
+      </div>
+      <div class="seg-target">
+        <textarea class="seg-target-text" rows="2">Este dispositivo está destinado para uso por profesionales médicos capacitados en entornos clínicos.</textarea>
+        <div class="seg-meta">
+          <span class="confidence high"><span class="confidence-dot"></span> High</span>
+          <span class="tm-match">94% TM</span>
+          <div class="seg-actions">
+            <button class="btn-approve approved-btn">✓ Approved</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segment 2 — Approved -->
+    <div class="segment approved">
+      <div class="seg-num">02</div>
+      <div class="seg-source">
+        Do not operate the equipment without first reviewing the safety guidelines outlined in Section 3.
+      </div>
+      <div class="seg-target">
+        <textarea class="seg-target-text" rows="2">No opere el equipo sin antes revisar las pautas de seguridad descritas en la Sección 3.</textarea>
+        <div class="seg-meta">
+          <span class="confidence high"><span class="confidence-dot"></span> High</span>
+          <div class="seg-actions">
+            <button class="btn-approve approved-btn">✓ Approved</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segment 3 — Active, Medium -->
+    <div class="segment active">
+      <div class="seg-num">03</div>
+      <div class="seg-source">
+        The calibration procedure must be performed every 72 hours to ensure accurate readings within the specified tolerance range of ±0.5%.
+      </div>
+      <div class="seg-target">
+        <textarea class="seg-target-text" rows="3">El procedimiento de calibración debe realizarse cada 72 horas para garantizar lecturas precisas dentro del rango de tolerancia especificado de ±0,5%.</textarea>
+        <div class="seg-meta">
+          <span class="confidence medium"><span class="confidence-dot"></span> Medium</span>
+          <span class="tm-match">87% TM</span>
+          <div class="seg-actions">
+            <button class="btn-edit-seg">Edit</button>
+            <button class="btn-approve">✓ Approve</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segment 4 — Low confidence -->
+    <div class="segment">
+      <div class="seg-num">04</div>
+      <div class="seg-source">
+        WARNING: Failure to comply with electromagnetic compatibility (EMC) requirements as defined in IEC 60601-1-2 may result in harmful interference with other medical devices in the vicinity.
+      </div>
+      <div class="seg-target">
+        <textarea class="seg-target-text" rows="3">ADVERTENCIA: El incumplimiento de los requisitos de compatibilidad electromagnética (CEM) según lo definido en la norma IEC 60601-1-2 puede provocar interferencias perjudiciales con otros dispositivos médicos cercanos.</textarea>
+        <div class="seg-meta">
+          <span class="confidence low"><span class="confidence-dot"></span> Low</span>
+          <div class="seg-actions">
+            <button class="btn-edit-seg">Edit</button>
+            <button class="btn-approve">✓ Approve</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segment 5 — High -->
+    <div class="segment">
+      <div class="seg-num">05</div>
+      <div class="seg-source">
+        Store the device in a dry environment between 15°C and 30°C when not in use.
+      </div>
+      <div class="seg-target">
+        <textarea class="seg-target-text" rows="2">Almacene el dispositivo en un ambiente seco entre 15 °C y 30 °C cuando no esté en uso.</textarea>
+        <div class="seg-meta">
+          <span class="confidence high"><span class="confidence-dot"></span> High</span>
+          <span class="tm-match">100% TM</span>
+          <div class="seg-actions">
+            <button class="btn-edit-seg">Edit</button>
+            <button class="btn-approve">✓ Approve</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segment 6 -->
+    <div class="segment">
+      <div class="seg-num">06</div>
+      <div class="seg-source">
+        The manufacturer disclaims all liability for injuries resulting from unauthorized modifications to this device.
+      </div>
+      <div class="seg-target">
+        <textarea class="seg-target-text" rows="2">El fabricante rechaza toda responsabilidad por lesiones resultantes de modificaciones no autorizadas a este dispositivo.</textarea>
+        <div class="seg-meta">
+          <span class="confidence high"><span class="confidence-dot"></span> High</span>
+          <div class="seg-actions">
+            <button class="btn-edit-seg">Edit</button>
+            <button class="btn-approve">✓ Approve</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segment 7 -->
+    <div class="segment">
+      <div class="seg-num">07</div>
+      <div class="seg-source">
+        Refer to Appendix B for a complete list of compatible accessories and replacement parts.
+      </div>
+      <div class="seg-target">
+        <textarea class="seg-target-text" rows="2">Consulte el Apéndice B para obtener una lista completa de accesorios compatibles y repuestos.</textarea>
+        <div class="seg-meta">
+          <span class="confidence medium"><span class="confidence-dot"></span> Medium</span>
+          <span class="tm-match">76% TM</span>
+          <div class="seg-actions">
+            <button class="btn-edit-seg">Edit</button>
+            <button class="btn-approve">✓ Approve</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+
+    <!-- TM Matches -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">
+        Translation Memory
+        <span class="count">3</span>
+      </div>
+
+      <div class="tm-result">
+        <div class="tm-result-header">
+          <span class="tm-score">94%</span>
+          <span class="tm-source-label">Source</span>
+        </div>
+        <div class="tm-text">The calibration procedure must be performed every 48 hours to ensure accurate readings.</div>
+        <div class="tm-text target">El procedimiento de calibración debe realizarse cada 48 horas para asegurar lecturas precisas.</div>
+        <button class="tm-use-btn">Use this translation</button>
+      </div>
+
+      <div class="tm-result">
+        <div class="tm-result-header">
+          <span class="tm-score">87%</span>
+          <span class="tm-source-label">Source</span>
+        </div>
+        <div class="tm-text">Calibration must be carried out at regular intervals to maintain measurement accuracy.</div>
+        <div class="tm-text target">La calibración debe llevarse a cabo a intervalos regulares para mantener la precisión de medición.</div>
+        <button class="tm-use-btn">Use this translation</button>
+      </div>
+
+      <div class="tm-result">
+        <div class="tm-result-header">
+          <span class="tm-score">72%</span>
+          <span class="tm-source-label">Source</span>
+        </div>
+        <div class="tm-text">Perform the verification procedure to ensure compliance with tolerance specifications.</div>
+        <div class="tm-text target">Realice el procedimiento de verificación para asegurar el cumplimiento de las especificaciones de tolerancia.</div>
+        <button class="tm-use-btn">Use this translation</button>
+      </div>
+    </div>
+
+    <!-- Glossary -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">
+        Glossary
+        <span class="count">5</span>
+      </div>
+      <div class="glossary-item">
+        <span class="glossary-source">calibration</span>
+        <span class="glossary-target">calibración <span class="glossary-domain">Medical</span></span>
+      </div>
+      <div class="glossary-item">
+        <span class="glossary-source">tolerance</span>
+        <span class="glossary-target">tolerancia</span>
+      </div>
+      <div class="glossary-item">
+        <span class="glossary-source">device</span>
+        <span class="glossary-target">dispositivo <span class="glossary-domain">Medical</span></span>
+      </div>
+      <div class="glossary-item">
+        <span class="glossary-source">EMC</span>
+        <span class="glossary-target">CEM</span>
+      </div>
+      <div class="glossary-item">
+        <span class="glossary-source">interference</span>
+        <span class="glossary-target">interferencia</span>
+      </div>
+    </div>
+
+    <!-- Comments -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">
+        Comments
+        <span class="count">2</span>
+      </div>
+      <div class="comment">
+        <div class="comment-avatar">MV</div>
+        <div class="comment-body">
+          <span class="comment-author">Mostansar V.<span class="comment-time">2h ago</span></span>
+          <div class="comment-text">Seg 4 — check "CEM" vs "EMC", client prefers the English abbreviation in Spanish docs.</div>
+        </div>
+      </div>
+      <div class="comment">
+        <div class="comment-avatar">LR</div>
+        <div class="comment-body">
+          <span class="comment-author">Laura R.<span class="comment-time">45m ago</span></span>
+          <div class="comment-text">Updated seg 3 with correct decimal separator for ES locale (comma instead of period).</div>
+        </div>
+      </div>
+      <div class="comment-input-wrap">
+        <input type="text" class="comment-input" placeholder="Add a comment…">
+        <button class="comment-send">→</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Translation Hub — AI-Powered Translation Platform</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap');
+
+  :root {
+    --navy: #001F3F;
+    --navy-deep: #00152B;
+    --navy-light: #0A2E52;
+    --gold: #D4AF37;
+    --gold-soft: #E8D48B;
+    --gold-pale: #FBF5E0;
+    --white: #FFFFFF;
+    --gray-50: #F8F9FB;
+    --gray-100: #F0F2F5;
+    --gray-200: #E2E5EA;
+    --gray-300: #C8CDD5;
+    --gray-400: #9BA3B0;
+    --gray-500: #6B7280;
+    --gray-600: #4B5563;
+    --gray-700: #374151;
+    --gray-900: #111827;
+    --green: #059669;
+    --shadow-md: 0 4px 12px rgba(0,31,63,0.08);
+    --shadow-lg: 0 8px 30px rgba(0,31,63,0.12);
+    --shadow-xl: 0 20px 60px rgba(0,31,63,0.15);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--gray-900);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ─── Navigation ─── */
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 0 40px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    background: rgba(0,21,43,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(212,175,55,0.15);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    text-decoration: none;
+    color: var(--white);
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .nav-logo-icon {
+    width: 30px;
+    height: 30px;
+    background: var(--gold);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    margin-left: 48px;
+  }
+
+  .nav-links a {
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.2s;
+    letter-spacing: 0.01em;
+  }
+
+  .nav-links a:hover { color: var(--gold-soft); }
+
+  .nav-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-nav-login {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 16px;
+    transition: color 0.2s;
+  }
+
+  .btn-nav-login:hover { color: var(--white); }
+
+  .btn-nav-cta {
+    background: var(--gold);
+    color: var(--navy);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+    letter-spacing: -0.01em;
+  }
+
+  .btn-nav-cta:hover { background: var(--gold-soft); transform: translateY(-1px); }
+
+  /* ─── Hero ─── */
+  .hero {
+    background: var(--navy);
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -150px;
+    left: -150px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(212,175,55,0.12);
+    border: 1px solid rgba(212,175,55,0.25);
+    padding: 6px 16px;
+    border-radius: 30px;
+    margin-bottom: 28px;
+    color: var(--gold-soft);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  .hero-badge-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: pulse-dot 2s ease infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.65;
+    max-width: 580px;
+    margin: 0 auto 36px;
+    font-weight: 400;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+  }
+
+  .btn-hero-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gold);
+    color: var(--navy);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 14px 32px;
+    border-radius: 10px;
+    transition: all 0.25s;
+    letter-spacing: -0.01em;
+  }
+
+  .btn-hero-primary:hover {
+    background: var(--gold-soft);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(212,175,55,0.3);
+  }
+
+  .btn-hero-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--white);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 28px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.25s;
+  }
+
+  .btn-hero-secondary:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.35);
+  }
+
+  .hero-engines {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .hero-engines-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.3);
+    font-weight: 600;
+  }
+
+  .engine-logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .engine-logo .dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 800;
+    color: white;
+  }
+
+  .engine-logo .dot.openai { background: #10A37F; }
+  .engine-logo .dot.claude { background: #D97757; }
+  .engine-logo .dot.deepl { background: #042B48; }
+
+  /* ─── Gold Divider ─── */
+  .gold-divider {
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--gold-soft), var(--gold), transparent);
+  }
+
+  /* ─── Tiers Section ─── */
+  .tiers-section {
+    padding: 80px 40px;
+    background: var(--white);
+    text-align: center;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .section-sub {
+    font-size: 15px;
+    color: var(--gray-500);
+    max-width: 520px;
+    margin: 0 auto 48px;
+    line-height: 1.6;
+  }
+
+  .tiers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .tier-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    text-align: left;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .tier-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .tier-card.featured {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 1px var(--gold), var(--shadow-lg);
+  }
+
+  .tier-card.featured::before {
+    content: 'Most Popular';
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .tier-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .tier-card:nth-child(1) .tier-icon { background: var(--gray-100); }
+  .tier-card:nth-child(2) .tier-icon { background: var(--gold-pale); }
+  .tier-card:nth-child(3) .tier-icon { background: rgba(0,31,63,0.08); }
+
+  .tier-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .tier-desc {
+    font-size: 13px;
+    color: var(--gray-500);
+    line-height: 1.55;
+    margin-bottom: 20px;
+  }
+
+  .tier-speed {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--green);
+    background: var(--gray-50);
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+
+  .tier-features {
+    list-style: none;
+    margin-bottom: 24px;
+  }
+
+  .tier-features li {
+    font-size: 13px;
+    color: var(--gray-600);
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tier-features li::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  .tier-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
+  .tier-price span {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--gray-400);
+  }
+
+  .tier-cta {
+    display: block;
+    width: 100%;
+    padding: 11px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s;
+    margin-top: 16px;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .tier-card:nth-child(1) .tier-cta,
+  .tier-card:nth-child(3) .tier-cta {
+    background: var(--gray-100);
+    color: var(--navy);
+    border: 1px solid var(--gray-200);
+  }
+
+  .tier-card:nth-child(1) .tier-cta:hover,
+  .tier-card:nth-child(3) .tier-cta:hover {
+    background: var(--navy);
+    color: var(--white);
+    border-color: var(--navy);
+  }
+
+  .tier-card.featured .tier-cta {
+    background: var(--navy);
+    color: var(--white);
+  }
+
+  .tier-card.featured .tier-cta:hover {
+    background: var(--navy-light);
+    transform: translateY(-1px);
+  }
+
+  /* ─── Features Section ─── */
+  .features-section {
+    padding: 80px 40px;
+    background: var(--gray-50);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .feature-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    transition: all 0.25s;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--gold);
+  }
+
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 18px;
+  }
+
+  .feature-card:nth-child(2) .feature-icon { background: linear-gradient(135deg, #10A37F, #0D8F6E); }
+  .feature-card:nth-child(3) .feature-icon { background: var(--gold); }
+  .feature-card:nth-child(4) .feature-icon { background: linear-gradient(135deg, var(--navy), var(--navy-light)); }
+
+  .feature-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .feature-desc {
+    font-size: 13px;
+    color: var(--gray-500);
+    line-height: 1.6;
+  }
+
+  /* ─── Stats Band ─── */
+  .stats-band {
+    background: var(--navy);
+    padding: 48px 40px;
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+  }
+
+  .band-stat {
+    text-align: center;
+  }
+
+  .band-stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .band-stat-label {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  /* ─── CTA Section ─── */
+  .cta-section {
+    padding: 80px 40px;
+    background: var(--white);
+    text-align: center;
+  }
+
+  .cta-box {
+    max-width: 640px;
+    margin: 0 auto;
+    background: var(--navy);
+    border-radius: 20px;
+    padding: 56px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-box::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 240px;
+    height: 240px;
+    background: radial-gradient(circle, rgba(212,175,55,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .cta-box h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+    position: relative;
+  }
+
+  .cta-box p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 28px;
+    line-height: 1.6;
+    position: relative;
+  }
+
+  .cta-box .btn-hero-primary {
+    position: relative;
+  }
+
+  /* ─── Footer ─── */
+  .footer {
+    background: var(--navy-deep);
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.4);
+    font-size: 13px;
+  }
+
+  .footer-brand strong {
+    color: rgba(255,255,255,0.6);
+    font-weight: 600;
+  }
+
+  .footer-epic {
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-links a {
+    color: rgba(255,255,255,0.35);
+    text-decoration: none;
+    font-size: 12px;
+    transition: color 0.15s;
+  }
+
+  .footer-links a:hover { color: var(--gold-soft); }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-icon">A</div>
+    AI Translation Hub
+  </a>
+  <div class="nav-links">
+    <a href="#">Platform</a>
+    <a href="#">Pricing</a>
+    <a href="#">For Translators</a>
+    <a href="#">Enterprise</a>
+  </div>
+  <div class="nav-right">
+    <a class="btn-nav-login" href="#">Log In</a>
+    <a class="btn-nav-cta" href="#">Start Free Trial</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Now powered by GPT-4o &amp; Claude
+    </div>
+    <h1>AI-Powered Translation.<br><em>Human-Perfected</em> Quality.</h1>
+    <p class="hero-sub">
+      Combine the speed of multi-engine AI with the precision of expert linguists.
+      Translation Memory that grows smarter with every project. Format-preserving export that matches your source documents perfectly.
+    </p>
+    <div class="hero-ctas">
+      <a class="btn-hero-primary" href="#">Start Free Trial →</a>
+      <a class="btn-hero-secondary" href="#">See It In Action</a>
+    </div>
+    <div class="hero-engines">
+      <span class="hero-engines-label">Powered by</span>
+      <div class="engine-logo">
+        <span class="dot openai">G</span> GPT-4o
+      </div>
+      <div class="engine-logo">
+        <span class="dot claude">C</span> Claude
+      </div>
+      <div class="engine-logo">
+        <span class="dot deepl">D</span> DeepL
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- Service Tiers -->
+<section class="tiers-section">
+  <div class="section-label">Choose Your Workflow</div>
+  <h2 class="section-title">Three ways to translate</h2>
+  <p class="section-sub">From fully automated to human-perfected — pick the quality level that fits your content.</p>
+
+  <div class="tiers-grid">
+    <!-- AI Only -->
+    <div class="tier-card">
+      <div class="tier-icon">⚡</div>
+      <div class="tier-name">AI Only</div>
+      <div class="tier-desc">Pure AI translation for internal docs, drafts, and high-volume content where speed matters most.</div>
+      <div class="tier-speed">⚡ Delivered in minutes</div>
+      <ul class="tier-features">
+        <li>Multi-engine AI (GPT-4o + Claude)</li>
+        <li>Translation Memory matching</li>
+        <li>Terminology consistency</li>
+        <li>Format-preserving export</li>
+      </ul>
+      <div class="tier-price">$0.02 <span>/ word</span></div>
+      <button class="tier-cta">Get Started</button>
+    </div>
+
+    <!-- AI + Light Review -->
+    <div class="tier-card featured">
+      <div class="tier-icon">✦</div>
+      <div class="tier-name">AI + Light Review</div>
+      <div class="tier-desc">AI translation with expert linguist review. Perfect for client-facing content, marketing, and correspondence.</div>
+      <div class="tier-speed">⚡ Delivered in hours</div>
+      <ul class="tier-features">
+        <li>Everything in AI Only</li>
+        <li>Professional linguist review</li>
+        <li>Quality estimation scoring</li>
+        <li>Side-by-side diff tracking</li>
+      </ul>
+      <div class="tier-price">$0.06 <span>/ word</span></div>
+      <button class="tier-cta">Start Free Trial</button>
+    </div>
+
+    <!-- Full MTPE -->
+    <div class="tier-card">
+      <div class="tier-icon">◆</div>
+      <div class="tier-name">AI + Full MTPE</div>
+      <div class="tier-desc">Complete post-editing by certified translators. For legal, medical, regulatory, and publication-quality work.</div>
+      <div class="tier-speed">⚡ Delivered in 1–3 days</div>
+      <ul class="tier-features">
+        <li>Everything in Light Review</li>
+        <li>Certified translator editing</li>
+        <li>Domain specialist matching</li>
+        <li>Compliance-ready output</li>
+      </ul>
+      <div class="tier-price">$0.10 <span>/ word</span></div>
+      <button class="tier-cta">Contact Sales</button>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features-section">
+  <div style="text-align:center; margin-bottom: 48px;">
+    <div class="section-label">Platform Features</div>
+    <h2 class="section-title">Built for the AI era</h2>
+    <p class="section-sub">Every feature designed to maximize quality while minimizing cost and turnaround time.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🔀</div>
+      <div class="feature-name">Multi-Engine AI</div>
+      <div class="feature-desc">Intelligent routing across GPT-4o, Claude, and DeepL. Each segment uses the best engine for its language pair and domain.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <div class="feature-name">Translation Memory</div>
+      <div class="feature-desc">Semantic TM powered by vector search. Gets smarter with every project. Exact and fuzzy matches reduce cost and improve consistency.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📄</div>
+      <div class="feature-name">Format-Preserving Export</div>
+      <div class="feature-desc">Upload DOCX, PDF, or PPTX. Get back a perfectly formatted translation that matches your source document layout.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✏️</div>
+      <div class="feature-name">Translator Workspace</div>
+      <div class="feature-desc">Side-by-side editor with confidence scores, TM suggestions, glossary, and real-time collaboration. Built for speed.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Band -->
+<div class="stats-band">
+  <div class="band-stat">
+    <div class="band-stat-value">73%</div>
+    <div class="band-stat-label">Average TM hit rate</div>
+  </div>
+  <div class="band-stat">
+    <div class="band-stat-value">4x</div>
+    <div class="band-stat-label">Faster than manual translation</div>
+  </div>
+  <div class="band-stat">
+    <div class="band-stat-value">60%</div>
+    <div class="band-stat-label">Cost reduction vs full human</div>
+  </div>
+  <div class="band-stat">
+    <div class="band-stat-value">50+</div>
+    <div class="band-stat-label">Languages supported</div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-box">
+    <h2>Ready to transform your translation workflow?</h2>
+    <p>Start your free 7-day trial. No credit card required. Upload your first document in under 2 minutes.</p>
+    <a class="btn-hero-primary" href="#">Start Free Trial →</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div>
+    <div class="footer-brand">
+      <strong>AI Translation Hub</strong> — Intelligent translation at scale
+    </div>
+    <div class="footer-epic" style="margin-top: 4px;">A product by EPIC Translations • Est. 2005 • Michigan, USA</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+    <a href="#">API Docs</a>
+  </div>
+</footer>
+
+</body>
+</html>

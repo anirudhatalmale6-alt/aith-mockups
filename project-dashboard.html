@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Translation Hub — Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@600;700&display=swap');
+
+  :root {
+    --navy: #001F3F;
+    --navy-deep: #00152B;
+    --navy-light: #0A2E52;
+    --navy-muted: #1A3A5C;
+    --gold: #D4AF37;
+    --gold-soft: #E8D48B;
+    --gold-pale: #FBF5E0;
+    --white: #FFFFFF;
+    --gray-50: #F8F9FB;
+    --gray-100: #F0F2F5;
+    --gray-200: #E2E5EA;
+    --gray-300: #C8CDD5;
+    --gray-400: #9BA3B0;
+    --gray-500: #6B7280;
+    --gray-600: #4B5563;
+    --gray-700: #374151;
+    --gray-900: #111827;
+    --green: #059669;
+    --green-bg: #ECFDF5;
+    --yellow: #D97706;
+    --yellow-bg: #FFFBEB;
+    --red: #DC2626;
+    --red-bg: #FEF2F2;
+    --blue: #2563EB;
+    --blue-bg: #EFF6FF;
+    --purple: #7C3AED;
+    --purple-bg: #F5F3FF;
+    --shadow-sm: 0 1px 2px rgba(0,31,63,0.06);
+    --shadow-md: 0 4px 12px rgba(0,31,63,0.08);
+    --shadow-lg: 0 8px 30px rgba(0,31,63,0.12);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  /* ─── Sidebar Nav ─── */
+  .layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    background: var(--navy);
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .sidebar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--gold), var(--gold-soft) 30%, transparent 80%);
+  }
+
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 8px;
+  }
+
+  .sidebar-logo-icon {
+    width: 34px;
+    height: 34px;
+    background: var(--gold);
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+  }
+
+  .sidebar-logo-text {
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .sidebar-logo-text small {
+    display: block;
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--gray-400);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  .nav-section {
+    padding: 12px 12px 4px;
+  }
+
+  .nav-section-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.3);
+    padding: 0 8px 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+    text-decoration: none;
+  }
+
+  .nav-item:hover {
+    background: rgba(255,255,255,0.08);
+    color: var(--white);
+  }
+
+  .nav-item.active {
+    background: rgba(212,175,55,0.15);
+    color: var(--gold-soft);
+  }
+
+  .nav-item .icon {
+    width: 18px;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .nav-item .badge {
+    margin-left: auto;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 10px;
+  }
+
+  .nav-bottom {
+    margin-top: auto;
+    padding: 12px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .nav-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .nav-user:hover { background: rgba(255,255,255,0.06); }
+
+  .nav-user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-soft));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+
+  .nav-user-info {
+    flex: 1;
+  }
+
+  .nav-user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .nav-user-role {
+    font-size: 10px;
+    color: var(--gray-400);
+  }
+
+  /* ─── Main Content ─── */
+  .main {
+    padding: 24px 28px;
+    overflow-y: auto;
+    max-height: 100vh;
+  }
+
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -0.02em;
+  }
+
+  .page-subtitle {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: 2px;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  .btn-primary:hover { background: var(--navy-light); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+  /* ─── Stats Cards ─── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+
+  .stat-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+  }
+
+  .stat-card:nth-child(1)::before { background: var(--navy); }
+  .stat-card:nth-child(2)::before { background: var(--gold); }
+  .stat-card:nth-child(3)::before { background: var(--green); }
+  .stat-card:nth-child(4)::before { background: var(--blue); }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gray-400);
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .stat-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 6px;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .stat-change.up { color: var(--green); background: var(--green-bg); }
+  .stat-change.neutral { color: var(--blue); background: var(--blue-bg); }
+
+  .stat-icon {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .stat-card:nth-child(1) .stat-icon { background: rgba(0,31,63,0.08); }
+  .stat-card:nth-child(2) .stat-icon { background: var(--gold-pale); }
+  .stat-card:nth-child(3) .stat-icon { background: var(--green-bg); }
+  .stat-card:nth-child(4) .stat-icon { background: var(--blue-bg); }
+
+  /* ─── Search & Filters ─── */
+  .controls-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .search-box {
+    flex: 1;
+    max-width: 320px;
+    position: relative;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 9px 12px 9px 34px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .search-box input:focus { border-color: var(--navy); }
+
+  .search-box::before {
+    content: '⌕';
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 15px;
+    color: var(--gray-400);
+  }
+
+  .filter-btn {
+    padding: 9px 14px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gray-600);
+    background: var(--white);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .filter-btn:hover { border-color: var(--navy); color: var(--navy); }
+  .filter-btn.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+  /* ─── Projects Table ─── */
+  .projects-table-wrap {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+
+  .projects-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .projects-table thead {
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .projects-table th {
+    padding: 10px 16px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gray-400);
+    text-align: left;
+  }
+
+  .projects-table td {
+    padding: 14px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--gray-100);
+    vertical-align: middle;
+  }
+
+  .projects-table tbody tr {
+    transition: background 0.1s;
+    cursor: pointer;
+  }
+
+  .projects-table tbody tr:hover {
+    background: rgba(212,175,55,0.04);
+  }
+
+  .projects-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .project-name-cell {
+    font-weight: 600;
+    color: var(--navy);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .project-name-cell small {
+    font-weight: 400;
+    font-size: 11px;
+    color: var(--gray-400);
+  }
+
+  .lang-cell {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gray-700);
+  }
+
+  .lang-cell .arrow { color: var(--gray-300); font-size: 10px; }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .status-badge.new { background: var(--blue-bg); color: var(--blue); }
+  .status-badge.in-progress { background: var(--yellow-bg); color: var(--yellow); }
+  .status-badge.review { background: var(--purple-bg); color: var(--purple); }
+  .status-badge.complete { background: var(--green-bg); color: var(--green); }
+
+  .status-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+
+  .status-badge.new .status-dot { background: var(--blue); }
+  .status-badge.in-progress .status-dot { background: var(--yellow); }
+  .status-badge.review .status-dot { background: var(--purple); }
+  .status-badge.complete .status-dot { background: var(--green); }
+
+  .words-cell {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--gray-600);
+  }
+
+  .engine-cell {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--gray-500);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .engine-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 800;
+    color: var(--white);
+  }
+
+  .engine-icon.openai { background: #10A37F; }
+  .engine-icon.claude { background: #D97757; }
+
+  .translator-cell {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .translator-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .translator-name {
+    font-size: 12px;
+    color: var(--gray-700);
+  }
+
+  .date-cell {
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+
+  .progress-cell {
+    width: 100px;
+  }
+
+  .mini-progress {
+    height: 5px;
+    background: var(--gray-100);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 3px;
+  }
+
+  .mini-progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+
+  .mini-progress-fill.green { background: var(--green); }
+  .mini-progress-fill.gold { background: var(--gold); }
+  .mini-progress-fill.blue { background: var(--blue); }
+
+  .mini-progress-text {
+    font-size: 10px;
+    color: var(--gray-400);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .action-btn {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--gray-200);
+    border-radius: 6px;
+    background: var(--white);
+    color: var(--gray-400);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: all 0.15s;
+  }
+
+  .action-btn:hover { border-color: var(--navy); color: var(--navy); }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">A</div>
+      <div class="sidebar-logo-text">
+        AI Translation Hub
+        <small>by EPIC Translations</small>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Main</div>
+      <a class="nav-item active" href="#">
+        <span class="icon">▦</span> Projects
+        <span class="badge">12</span>
+      </a>
+      <a class="nav-item" href="#">
+        <span class="icon">⊞</span> Workspace
+      </a>
+      <a class="nav-item" href="#">
+        <span class="icon">⟳</span> Translation Memory
+      </a>
+      <a class="nav-item" href="#">
+        <span class="icon">◉</span> Glossaries
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Analytics</div>
+      <a class="nav-item" href="#">
+        <span class="icon">◔</span> Reports
+      </a>
+      <a class="nav-item" href="#">
+        <span class="icon">⊟</span> Billing
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Manage</div>
+      <a class="nav-item" href="#">
+        <span class="icon">◎</span> Translators
+      </a>
+      <a class="nav-item" href="#">
+        <span class="icon">⚙</span> Settings
+      </a>
+    </div>
+
+    <div class="nav-bottom">
+      <div class="nav-user">
+        <div class="nav-user-avatar">MV</div>
+        <div class="nav-user-info">
+          <div class="nav-user-name">Mostansar V.</div>
+          <div class="nav-user-role">Admin</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Projects</h1>
+        <p class="page-subtitle">Manage and track your translation projects</p>
+      </div>
+      <button class="btn-primary">+ New Project</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Projects</div>
+        <div class="stat-value">12</div>
+        <span class="stat-change up">↑ 3 this week</span>
+        <div class="stat-icon">📁</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Words This Month</div>
+        <div class="stat-value">48.2K</div>
+        <span class="stat-change up">↑ 22%</span>
+        <div class="stat-icon">✎</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">TM Hit Rate</div>
+        <div class="stat-value">73%</div>
+        <span class="stat-change up">↑ 8%</span>
+        <div class="stat-icon">⟳</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Cost Savings</div>
+        <div class="stat-value">$2.4K</div>
+        <span class="stat-change neutral">vs full human</span>
+        <div class="stat-icon">↓</div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls-bar">
+      <div class="search-box">
+        <input type="text" placeholder="Search projects…">
+      </div>
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">In Progress</button>
+      <button class="filter-btn">Review</button>
+      <button class="filter-btn">Complete</button>
+    </div>
+
+    <!-- Table -->
+    <div class="projects-table-wrap">
+      <table class="projects-table">
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Languages</th>
+            <th>Status</th>
+            <th>Words</th>
+            <th>AI Engine</th>
+            <th>Translator</th>
+            <th>Due Date</th>
+            <th>Progress</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="project-name-cell">
+                Medical Device Manual v2.4
+                <small>DOCX • Uploaded May 10</small>
+              </div>
+            </td>
+            <td>
+              <div class="lang-cell">🇺🇸 EN <span class="arrow">→</span> 🇪🇸 ES</div>
+            </td>
+            <td><span class="status-badge in-progress"><span class="status-dot"></span> In Progress</span></td>
+            <td><span class="words-cell">8,420</span></td>
+            <td>
+              <div class="engine-cell">
+                <span class="engine-icon openai">G</span> GPT-4o
+              </div>
+            </td>
+            <td>
+              <div class="translator-cell">
+                <span class="translator-avatar" style="background:#2563EB">LR</span>
+                <span class="translator-name">Laura R.</span>
+              </div>
+            </td>
+            <td><span class="date-cell">May 15</span></td>
+            <td class="progress-cell">
+              <div class="mini-progress"><div class="mini-progress-fill gold" style="width:68%"></div></div>
+              <span class="mini-progress-text">34/50 segs</span>
+            </td>
+            <td><button class="action-btn">→</button></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="project-name-cell">
+                Legal Contract — NDA Template
+                <small>PDF • Uploaded May 8</small>
+              </div>
+            </td>
+            <td>
+              <div class="lang-cell">🇺🇸 EN <span class="arrow">→</span> 🇫🇷 FR</div>
+            </td>
+            <td><span class="status-badge review"><span class="status-dot"></span> Review</span></td>
+            <td><span class="words-cell">3,150</span></td>
+            <td>
+              <div class="engine-cell">
+                <span class="engine-icon claude">C</span> Claude
+              </div>
+            </td>
+            <td>
+              <div class="translator-cell">
+                <span class="translator-avatar" style="background:#7C3AED">JP</span>
+                <span class="translator-name">Jean-Pierre M.</span>
+              </div>
+            </td>
+            <td><span class="date-cell">May 12</span></td>
+            <td class="progress-cell">
+              <div class="mini-progress"><div class="mini-progress-fill green" style="width:92%"></div></div>
+              <span class="mini-progress-text">46/50 segs</span>
+            </td>
+            <td><button class="action-btn">→</button></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="project-name-cell">
+                Marketing Brochure — Spring Campaign
+                <small>DOCX • Uploaded May 11</small>
+              </div>
+            </td>
+            <td>
+              <div class="lang-cell">🇺🇸 EN <span class="arrow">→</span> 🇩🇪 DE</div>
+            </td>
+            <td><span class="status-badge new"><span class="status-dot"></span> New</span></td>
+            <td><span class="words-cell">1,890</span></td>
+            <td>
+              <div class="engine-cell">
+                <span class="engine-icon openai">G</span> GPT-4o
+              </div>
+            </td>
+            <td>
+              <div class="translator-cell">
+                <span class="translator-avatar" style="background:var(--gray-300)">—</span>
+                <span class="translator-name" style="color:var(--gray-400)">Unassigned</span>
+              </div>
+            </td>
+            <td><span class="date-cell">May 18</span></td>
+            <td class="progress-cell">
+              <div class="mini-progress"><div class="mini-progress-fill blue" style="width:0%"></div></div>
+              <span class="mini-progress-text">Queued</span>
+            </td>
+            <td><button class="action-btn">→</button></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="project-name-cell">
+                Patient Intake Forms
+                <small>PDF • Uploaded May 6</small>
+              </div>
+            </td>
+            <td>
+              <div class="lang-cell">🇺🇸 EN <span class="arrow">→</span> 🇸🇦 AR</div>
+            </td>
+            <td><span class="status-badge complete"><span class="status-dot"></span> Complete</span></td>
+            <td><span class="words-cell">2,340</span></td>
+            <td>
+              <div class="engine-cell">
+                <span class="engine-icon claude">C</span> Claude
+              </div>
+            </td>
+            <td>
+              <div class="translator-cell">
+                <span class="translator-avatar" style="background:#D97706">FK</span>
+                <span class="translator-name">Fatima K.</span>
+              </div>
+            </td>
+            <td><span class="date-cell">May 9</span></td>
+            <td class="progress-cell">
+              <div class="mini-progress"><div class="mini-progress-fill green" style="width:100%"></div></div>
+              <span class="mini-progress-text">100% done</span>
+            </td>
+            <td><button class="action-btn">→</button></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="project-name-cell">
+                Software UI Strings — CRM Module
+                <small>XLIFF • Uploaded May 9</small>
+              </div>
+            </td>
+            <td>
+              <div class="lang-cell">🇺🇸 EN <span class="arrow">→</span> 🇯🇵 JA</div>
+            </td>
+            <td><span class="status-badge in-progress"><span class="status-dot"></span> In Progress</span></td>
+            <td><span class="words-cell">5,670</span></td>
+            <td>
+              <div class="engine-cell">
+                <span class="engine-icon openai">G</span> GPT-4o
+              </div>
+            </td>
+            <td>
+              <div class="translator-cell">
+                <span class="translator-avatar" style="background:#059669">YT</span>
+                <span class="translator-name">Yuki T.</span>
+              </div>
+            </td>
+            <td><span class="date-cell">May 16</span></td>
+            <td class="progress-cell">
+              <div class="mini-progress"><div class="mini-progress-fill gold" style="width:45%"></div></div>
+              <span class="mini-progress-text">128/284 segs</span>
+            </td>
+            <td><button class="action-btn">→</button></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="project-name-cell">
+                Employee Handbook 2026
+                <small>DOCX • Uploaded May 4</small>
+              </div>
+            </td>
+            <td>
+              <div class="lang-cell">🇺🇸 EN <span class="arrow">→</span> 🇧🇷 PT</div>
+            </td>
+            <td><span class="status-badge complete"><span class="status-dot"></span> Complete</span></td>
+            <td><span class="words-cell">12,800</span></td>
+            <td>
+              <div class="engine-cell">
+                <span class="engine-icon claude">C</span> Claude
+              </div>
+            </td>
+            <td>
+              <div class="translator-cell">
+                <span class="translator-avatar" style="background:#DC2626">RS</span>
+                <span class="translator-name">Ricardo S.</span>
+              </div>
+            </td>
+            <td><span class="date-cell">May 10</span></td>
+            <td class="progress-cell">
+              <div class="mini-progress"><div class="mini-progress-fill green" style="width:100%"></div></div>
+              <span class="mini-progress-text">100% done</span>
+            </td>
+            <td><button class="action-btn">→</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
